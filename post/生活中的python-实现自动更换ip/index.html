@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>生活中的python-实现自动更换ip | BlackRun的博客</title>
+    <meta property="og:title" content="生活中的python-实现自动更换ip - BlackRun的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2017-05-18T14:41:12&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2017-05-18T14:41:12&#43;08:00'>
+        
+    <meta name="Keywords" content="android,博客,项目管理,python,软件架构,公众号,小程序,JavaScript">
+    <meta name="description" content="生活中的python-实现自动更换ip">
+        
+    <meta name="author" content="BlackRun">
+    <meta property="og:url" content="https://www.flysnow.org/post/%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84python-%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%8D%A2ip/">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+
+
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://www.flysnow.org">
+                        BlackRun的博客
+                    </a>
+                
+                <p class="description">不积跬步，无以至千里；不积小流，无以成江海。骐骥一跃，不能十步；驽马十驾，功在不舍。锲而舍之，朽木不折；锲而不舍，金石可镂。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://www.flysnow.org">首页</a>
+                    
+                    <a  href="https://www.flysnow.org/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://www.flysnow.org/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents"></nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">生活中的python-实现自动更换ip</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2017年5月18日
+        </date>
+        
+        <div class="post-meta">
+            <span>|</span>
+            
+            <span class="meta-category"><a href='https://www.flysnow.org/categories/python'>python</a></span>
+            
+        </div>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>在办公室有两个网络需要随时切换使用，而且需要静态获取，每次手动太麻烦，所以写了个脚本用来自动切换ip。</p>
+<p>源码已经上传：<a href="https://github.com/juventusryp/python-in-life">https://github.com/juventusryp/python-in-life</a></p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">113
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">114
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">115
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">116
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">117
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">118
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">119
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">120
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">121
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">122
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">123
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">124
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
+<span style="color:#998;font-style:italic"># -*- coding: utf-8 -*-</span>
+
+<span style="color:#000;font-weight:bold">import</span> <span style="color:#555">wmi</span>
+
+<span style="color:#000;font-weight:bold">import</span> <span style="color:#555">random</span>
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">正在修改IP,请稍候...</span><span style="color:#d14">&#39;</span>)
+
+wmiService <span style="color:#000;font-weight:bold">=</span> wmi<span style="color:#000;font-weight:bold">.</span>WMI()
+
+colNicConfigs <span style="color:#000;font-weight:bold">=</span> wmiService<span style="color:#000;font-weight:bold">.</span>Win32_NetworkAdapterConfiguration(IPEnabled <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">True</span>)
+
+<span style="color:#000;font-weight:bold">if</span> <span style="color:#0086b3">len</span>(colNicConfigs) <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">没有找到可用的网络适配器</span><span style="color:#d14">&#39;</span>)
+
+<span style="color:#0086b3">exit</span>()
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">-------------------------------------------------------</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>)
+
+<span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(colNicConfigs)):
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#0086b3">str</span>(i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>)<span style="color:#000;font-weight:bold">+</span><span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14"> : </span><span style="color:#d14">&#34;</span>,colNicConfigs[i]<span style="color:#000;font-weight:bold">.</span>IPAddress)
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">-------------------------------------------------------</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>)
+
+i<span style="color:#000;font-weight:bold">=</span><span style="color:#0086b3">int</span>(<span style="color:#0086b3">input</span>(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">选择以太网卡：</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>))
+
+objNicConfig <span style="color:#000;font-weight:bold">=</span> colNicConfigs[i<span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>]
+
+i<span style="color:#000;font-weight:bold">=</span><span style="color:#0086b3">int</span>(<span style="color:#0086b3">input</span>(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">---------------------------</span><span style="color:#d14">\n</span><span style="color:#d14">1、切换成校园网</span><span style="color:#d14">\n</span><span style="color:#d14">2、切换成联通网</span><span style="color:#d14">\n</span><span style="color:#d14">---------------------------</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>))
+
+<span style="color:#000;font-weight:bold">if</span>(i<span style="color:#000;font-weight:bold">==</span><span style="color:#099">1</span>):
+
+arrIPAddresses <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">192.168.2.11</span><span style="color:#d14">&#39;</span>]
+
+arrSubnetMasks <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">255.255.255.0</span><span style="color:#d14">&#39;</span>]
+
+arrDefaultGateways <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">192.168.2.1</span><span style="color:#d14">&#39;</span>]
+
+arrGatewayCostMetrics <span style="color:#000;font-weight:bold">=</span> [<span style="color:#099">1</span>]
+
+arrDNSServers <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">114.114.114.114</span><span style="color:#d14">&#39;</span>, <span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">8.8.8.8</span><span style="color:#d14">&#39;</span>]
+
+intReboot <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>
+
+returnValue <span style="color:#000;font-weight:bold">=</span> objNicConfig<span style="color:#000;font-weight:bold">.</span>EnableStatic(IPAddress <span style="color:#000;font-weight:bold">=</span> arrIPAddresses, SubnetMask <span style="color:#000;font-weight:bold">=</span>arrSubnetMasks)
+
+<span style="color:#000;font-weight:bold">if</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">or</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">设置IP成功</span><span style="color:#d14">&#39;</span>)
+
+intReboot <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> returnValue[<span style="color:#099">0</span>]
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改失败: IP或子网掩码设置发生错误</span><span style="color:#d14">&#39;</span>)
+
+returnValue <span style="color:#000;font-weight:bold">=</span> objNicConfig<span style="color:#000;font-weight:bold">.</span>SetGateways(DefaultIPGateway <span style="color:#000;font-weight:bold">=</span> arrDefaultGateways, GatewayCostMetric <span style="color:#000;font-weight:bold">=</span> arrGatewayCostMetrics)
+
+<span style="color:#000;font-weight:bold">if</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">or</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">设置网关成功</span><span style="color:#d14">&#39;</span>)
+
+intReboot <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> returnValue[<span style="color:#099">0</span>]
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改失败: 网关设置发生错误</span><span style="color:#d14">&#39;</span>)
+
+returnValue <span style="color:#000;font-weight:bold">=</span> objNicConfig<span style="color:#000;font-weight:bold">.</span>SetDNSServerSearchOrder(DNSServerSearchOrder <span style="color:#000;font-weight:bold">=</span> arrDNSServers)
+
+<span style="color:#000;font-weight:bold">if</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">or</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">设置DNS成功</span><span style="color:#d14">&#39;</span>)
+
+intReboot <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> returnValue[<span style="color:#099">0</span>]
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#0086b3">str</span>(returnValue)<span style="color:#000;font-weight:bold">+</span><span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改失败: DNS设置发生错误</span><span style="color:#d14">&#39;</span>)
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+arrIPAddresses <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">10.253.201.100</span><span style="color:#d14">&#39;</span>]
+
+arrSubnetMasks <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">255.255.224.0</span><span style="color:#d14">&#39;</span>]
+
+arrDefaultGateways <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">10.253.223.254</span><span style="color:#d14">&#39;</span>]
+
+arrGatewayCostMetrics <span style="color:#000;font-weight:bold">=</span> [<span style="color:#099">1</span>]
+
+arrDNSServers <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">114.114.114.114</span><span style="color:#d14">&#39;</span>, <span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">8.8.8.8</span><span style="color:#d14">&#39;</span>]
+
+intReboot <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>
+
+returnValue <span style="color:#000;font-weight:bold">=</span> objNicConfig<span style="color:#000;font-weight:bold">.</span>EnableStatic(IPAddress <span style="color:#000;font-weight:bold">=</span> arrIPAddresses, SubnetMask <span style="color:#000;font-weight:bold">=</span>arrSubnetMasks)
+
+<span style="color:#000;font-weight:bold">if</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">or</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">设置IP成功</span><span style="color:#d14">&#39;</span>)
+
+intReboot <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> returnValue[<span style="color:#099">0</span>]
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改失败: IP或子网掩码设置发生错误</span><span style="color:#d14">&#39;</span>)
+
+returnValue <span style="color:#000;font-weight:bold">=</span> objNicConfig<span style="color:#000;font-weight:bold">.</span>SetGateways(DefaultIPGateway <span style="color:#000;font-weight:bold">=</span> arrDefaultGateways, GatewayCostMetric <span style="color:#000;font-weight:bold">=</span> arrGatewayCostMetrics)
+
+<span style="color:#000;font-weight:bold">if</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">or</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">设置网关成功</span><span style="color:#d14">&#39;</span>)
+
+intReboot <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> returnValue[<span style="color:#099">0</span>]
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改失败: 网关设置发生错误</span><span style="color:#d14">&#39;</span>)
+
+returnValue <span style="color:#000;font-weight:bold">=</span> objNicConfig<span style="color:#000;font-weight:bold">.</span>SetDNSServerSearchOrder(DNSServerSearchOrder <span style="color:#000;font-weight:bold">=</span> arrDNSServers)
+
+<span style="color:#000;font-weight:bold">if</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">or</span> returnValue[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">设置DNS成功</span><span style="color:#d14">&#39;</span>)
+
+intReboot <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> returnValue[<span style="color:#099">0</span>]
+
+<span style="color:#000;font-weight:bold">else</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#0086b3">str</span>(returnValue)<span style="color:#000;font-weight:bold">+</span><span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改失败: DNS设置发生错误</span><span style="color:#d14">&#39;</span>)
+
+<span style="color:#000;font-weight:bold">if</span> intReboot <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>:
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">需要重新启动计算机</span><span style="color:#d14">&#39;</span>)
+
+<span style="color:#000;font-weight:bold">print</span> (<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">修改结束</span><span style="color:#d14">&#39;</span>)
+
+</code></pre></td></tr></table>
+</div>
+</div>
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://www.flysnow.org">BlackRun</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.flysnow.org/post/%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84python-%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%8D%A2ip/">https://www.flysnow.org/post/%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84python-%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%8D%A2ip/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/mac%E4%B8%8A%E5%AE%89%E8%A3%85virtualenvwrapper%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF/">mac上安装virtualenvwrapper的正确姿势</a></li>
+        
+        <li><a href="/post/win7%E4%B8%8B%E5%BF%AB%E9%80%9F%E5%88%87%E6%8D%A2python2%E5%92%8Cpython3/">win7下快速切换python2和python3</a></li>
+        
+        <li><a href="/post/ubuntu%E6%9B%B4%E6%94%B9%E6%BA%90%E7%9A%84%E9%97%AE%E9%A2%98/">ubuntu更改源的问题</a></li>
+        
+        <li><a href="/about/"></a></li>
+        
+        <li><a href="/archives/">归档</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='https://www.flysnow.org/tags/python'>python</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "juventusryp/utteranc"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://www.flysnow.org/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://www.flysnow.org">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://www.flysnow.org/post/%E5%9C%A8%E9%98%BF%E9%87%8C%E4%BA%91%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2flasknginx-gunicory/" title="在阿里云使用docker部署flask（nginx&#43;gunicory）">在阿里云使用docker部署flask（nginx&#43;gunicory）</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/post/%E5%9C%A8Ubuntu%E4%B8%8A%E4%BD%BF%E7%94%A8Nginx-uWSGI%E9%83%A8%E7%BD%B2Flask%E5%BA%94%E7%94%A8/" title="在Ubuntu上使用Nginx&#43;uWSGI部署Flask应用">在Ubuntu上使用Nginx&#43;uWSGI部署Flask应用</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/post/%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84python-%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%8D%A2ip/" title="生活中的python-实现自动更换ip">生活中的python-实现自动更换ip</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/post/mac%E4%B8%8A%E5%AE%89%E8%A3%85virtualenvwrapper%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF/" title="mac上安装virtualenvwrapper的正确姿势">mac上安装virtualenvwrapper的正确姿势</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/post/ubuntu%E6%9B%B4%E6%94%B9%E6%BA%90%E7%9A%84%E9%97%AE%E9%A2%98/" title="ubuntu更改源的问题">ubuntu更改源的问题</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/post/win7%E4%B8%8B%E5%BF%AB%E9%80%9F%E5%88%87%E6%8D%A2python2%E5%92%8Cpython3/" title="win7下快速切换python2和python3">win7下快速切换python2和python3</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title" style="color:red">福利派送</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a href="https://s.click.taobao.com/t?e=m%3D2%26s%3DcZ%2FUMvACNJIcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAhFPnU1ehdv0JvBFe9J%2BY0DYfIY6hqvfbeTA3EelB8UPrjX9XZG%2Fs%2FGPv9RvvMCUVjDVuRn8ddiDsEVVC24eqozO54LQ%2FVw1L9X5LHh3Z8M%2BWS6ALZVeqlk9XUfbPSJC%2F06deTzTIbffYpyF7ku%2BxKhmP4RbR9G21%2FOCIjQ5MjhgxgxdTc00KD8%3D" title="阿里云高性能服务器" target="_blank" style="color:red">
+                
+                    <img src="http://pic.lovehxy.com/%E9%98%BF%E9%87%8C%E4%BA%91%E5%B9%BF%E5%91%8A%E5%A4%A7.jpg">
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href="https://cloud.tencent.com/act/cps/redirect?redirect=1052&amp;cps_key=fc059b763bff7316ab189c1fda5ac18b&amp;from=console" title="【腾讯云】12.12云产品限时秒杀，爆款1核2G云服务器，99元/1年" target="_blank" style="color:red">
+                
+                    <img src="http://pic.lovehxy.com/%E8%85%BE%E8%AE%AF%E4%BA%91%E5%B9%BF%E5%91%8A.jpg">
+                
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">分类</h3>
+<ul class="widget-list">
+    
+    <li><a href="https://www.flysnow.org/categories/linux/">linux (1)</a></li>
+    
+    <li><a href="https://www.flysnow.org/categories/python/">python (5)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">标签</h3>
+<div class="tagcloud">
+    
+    <a href="https://www.flysnow.org/tags/linux/">linux</a>
+    
+    <a href="https://www.flysnow.org/tags/python/">python</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://www.python.org/" title="人生苦短，我用Python">人生苦短，我用Python</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://www.flysnow.org/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+    <div class="container">
+        &copy; 2019 <a href="https://www.flysnow.org">BlackRun的博客 By BlackRun</a>.
+        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
+        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/flysnow-org/maupassant-hugo" target="_blank">maupassant</a>.
+        
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-155010305-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+</body>
+
+</html>
