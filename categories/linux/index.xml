@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>linux on BlackRun的博客</title>
-    <link>https://www.flysnow.org/categories/linux/</link>
+    <link>https://www.lovehxy.com/categories/linux/</link>
     <description>Recent content in linux on BlackRun的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Fri, 06 May 2016 16:17:36 +0000</lastBuildDate>
     
-	<atom:link href="https://www.flysnow.org/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.lovehxy.com/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>ubuntu更改源的问题</title>
-      <link>https://www.flysnow.org/post/ubuntu%E6%9B%B4%E6%94%B9%E6%BA%90%E7%9A%84%E9%97%AE%E9%A2%98/</link>
+      <link>https://www.lovehxy.com/post/ubuntu%E6%9B%B4%E6%94%B9%E6%BA%90%E7%9A%84%E9%97%AE%E9%A2%98/</link>
       <pubDate>Fri, 06 May 2016 16:17:36 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/post/ubuntu%E6%9B%B4%E6%94%B9%E6%BA%90%E7%9A%84%E9%97%AE%E9%A2%98/</guid>
+      <guid>https://www.lovehxy.com/post/ubuntu%E6%9B%B4%E6%94%B9%E6%BA%90%E7%9A%84%E9%97%AE%E9%A2%98/</guid>
       <description>&lt;p&gt;前几天在虚拟机装了ubuntu系统，然后修改/etc/apt/source.list文件，将官方源替换成阿里源后。出现无法用apt-get安装软件的情况，经过查阅发现原来是codename的问题。&lt;/p&gt;</description>
     </item>
     
